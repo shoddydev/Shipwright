@@ -4,5 +4,6 @@
 [submodule "OTRExporter"]
 	path = OTRExporter
 	url = https://github.com/harbourmasters/OTRExporter
-[submodule "libultraship/"]
+[submodule "libultraship"]
+	path = libultraship
 	url = https://github.com/shoddydev/libultraship.git
