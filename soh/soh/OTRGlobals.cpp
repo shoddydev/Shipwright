@@ -1,4 +1,4 @@
-﻿#include "OTRGlobals.h"
+#include "OTRGlobals.h"
 #include "OTRAudio.h"
 #include <iostream>
 #include <algorithm>
@@ -1152,7 +1152,7 @@ extern "C" void Graph_ProcessFrame(void (*run_one_game_iter)(void)) {
     OTRGlobals::Instance->context->GetWindow()->MainLoop(run_one_game_iter);
 }
 
-extern bool ToggleAltAssetsAtEndOfFrame;
+extern bool ShouldClearTextureCacheAtEndOfFrame;
 
 extern "C" void Graph_StartFrame() {
 #ifndef __WIIU__
@@ -1235,7 +1235,7 @@ extern "C" void Graph_StartFrame() {
         }
 #endif
         case KbScancode::LUS_KB_TAB: {
-            ToggleAltAssetsAtEndOfFrame = true;
+            ShouldClearTextureCacheAtEndOfFrame = true;
             break;
         }
     }
@@ -1315,14 +1315,10 @@ extern "C" void Graph_ProcessGfxCommands(Gfx* commands) {
         }
     }
 
-    if (ToggleAltAssetsAtEndOfFrame) {
-        ToggleAltAssetsAtEndOfFrame = false;
-
-        // Actually update the CVar now before runing the alt asset update listeners
-        CVarSetInteger("gAltAssets", !CVarGetInteger("gAltAssets", 0));
+    if (ShouldClearTextureCacheAtEndOfFrame) {
         gfx_texture_cache_clear();
         LUS::SkeletonPatcher::UpdateSkeletons();
-        GameInteractor::Instance->ExecuteHooks<GameInteractor::OnAssetAltChange>();
+        ShouldClearTextureCacheAtEndOfFrame = false;
     }
 
     // OTRTODO: FIGURE OUT END FRAME POINT
