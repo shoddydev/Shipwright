@@ -69,7 +69,7 @@ void KaleidoSetup_Update(PlayState* play) {
 
         if (pauseCtx->state == 1) {
             WREG(2) = -6240;
-            R_UPDATE_RATE = 2;
+            R_UPDATE_RATE = 3;
 
             if (ShrinkWindow_GetVal()) {
                 ShrinkWindow_SetVal(0);
