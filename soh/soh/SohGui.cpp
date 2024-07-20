@@ -37,8 +37,9 @@
 
 #include "Enhancements/game-interactor/GameInteractor.h"
 #include "Enhancements/cosmetics/authenticGfxPatches.h"
+#include "Enhancements/resolution-editor/ResolutionEditor.h"
 
-bool ToggleAltAssetsAtEndOfFrame = false;
+bool ShouldClearTextureCacheAtEndOfFrame = false;
 bool isBetaQuestEnabled = false;
 
 extern "C" {
@@ -127,6 +128,8 @@ namespace SohGui {
     std::shared_ptr<RandomizerSettingsWindow> mRandomizerSettingsWindow;
     std::shared_ptr<SohModalWindow> mModalWindow;
 
+    std::shared_ptr<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow> mAdvancedResolutionSettingsWindow;
+
     void SetupGuiElements() {
         auto gui = LUS::Context::GetInstance()->GetWindow()->GetGui();
 
@@ -137,7 +140,7 @@ namespace SohGui {
 #if defined(__SWITCH__) || defined(__WIIU__)
             gui->GetGameOverlay()->TextDrawNotification(30.0f, true, "Press - to access enhancements menu");
 #else
-            gui->GetGameOverlay()->TextDrawNotification(30.0f, true, "Press F1 to access enhancements menu");
+            gui->GetGameOverlay()->TextDrawNotification(30.0f, true, "Press Eject to access enhancements menu");
 #endif
         }
 
@@ -187,9 +190,12 @@ namespace SohGui {
         mModalWindow = std::make_shared<SohModalWindow>("gOpenWindows.modalWindowEnabled", "Modal Window");
         gui->AddGuiWindow(mModalWindow);
         mModalWindow->Show();
+    mAdvancedResolutionSettingsWindow = std::make_shared<AdvancedResolutionSettings::AdvancedResolutionSettingsWindow>("gAdvancedResolutionEditorEnabled", "Advanced Resolution Settings");
+        gui->AddGuiWindow(mAdvancedResolutionSettingsWindow);
     }
 
     void Destroy() {
+        mAdvancedResolutionSettingsWindow = nullptr;
         mModalWindow = nullptr;
         mRandomizerSettingsWindow = nullptr;
         mItemTrackerWindow = nullptr;
