@@ -6,3 +6,6 @@
 	url = https://github.com/harbourmasters/OTRExporter
 [submodule "libultraship/"]
 	url = https://github.com/shoddydev/libultraship.git
+[submodule "libultraship"]
+	path = libultraship
+	url = https://github.com/shoddydev/libultraship.git
